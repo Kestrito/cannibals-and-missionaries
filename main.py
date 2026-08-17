@@ -90,8 +90,6 @@ class Game:
 
     ##Sail the raft to the other side
     def sail(self):
-        if not any(self.raft):
-            return
         self.side = not self.side
         i = self.side
         for passenger_index in range(2):
@@ -241,10 +239,11 @@ def click_sprites(game, click_pos):
                     if check_collision(sprite, spr_pos, click_pos):
                         return game.embark(castaway_index, passenger_index)
     ##React for raft's sprite
-    sprite = RAFT_SPRITES[game.side]
-    spr_pos = RAFT_POS[game.side]
-    if check_collision(sprite, spr_pos, click_pos):
-        return game.sail()
+    if any(game.raft):
+        sprite = RAFT_SPRITES[game.side]
+        spr_pos = RAFT_POS[game.side]
+        if check_collision(sprite, spr_pos, click_pos):
+            return game.sail()
 
 ##Print the necessary elements for each screen
 def update_screens(screens):
