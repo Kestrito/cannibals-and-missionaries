@@ -216,8 +216,6 @@ def check_collision(sprite, spr_pos, click_pos):
     return spr_rect.collidepoint(click_pos)
 
 def click_sprites(game, click_pos):
-    if game.flag:
-        return
     for passenger_index in range(2):
         passenger = game.raft[passenger_index]
         if passenger:
