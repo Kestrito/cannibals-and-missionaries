@@ -17,6 +17,17 @@ Click (or press if playing on mobile) on a cannibal or missionary to put them on
 To install the requirements, run the following line in cmd:
 
 `python -m pip install -r requirements.txt`
+
+
+
+
+## Web version
+
+You can play the web version [here](https://kestrito.github.io/cannibals-and-missionaries/).
+
+
+
+
 ## Credits
 
 Code made entirely by me.
