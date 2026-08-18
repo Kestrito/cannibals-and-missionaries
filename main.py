@@ -1,5 +1,6 @@
 import pygame
 import sys
+import asyncio
 
 ##Castaways/Passengers:
 ##0 - None
@@ -140,7 +141,7 @@ CASTAWAY_POS = {(0, 0, 0): (0, 220),
 RAFT_POS = {0: (400, 220),
             1: (610, 220)}
 
-##Convert raft side and passanger index to passenger's position in screen 
+##Convert raft side and passanger index to passenger's position in screen
 PASSENGER_POS = {(0, 0): (420, 270),
                  (0, 1): (530, 270),
                  (1, 0): (630, 270),
@@ -165,12 +166,9 @@ GAME_SCREENS = {'background': pygame.image.load("Images/background.png").convert
                 'home': pygame.image.load("Images/home.png").convert_alpha(),
                 'instructions': pygame.image.load("Images/instructions.png").convert_alpha(),
                 'lost': pygame.image.load("Images/lost.png").convert_alpha(),
-                'won': pygame.image.load("Images/won.png").convert_alpha(),
-                'close': pygame.image.load("Images/close.png").convert_alpha()}
-
+                'won': pygame.image.load("Images/won.png").convert_alpha()}
 ##Collisions for game buttons
-BUTTON_COLLISIONS = {'close': pygame.Rect(1205, 0, 75, 75),
-                     'play': pygame.Rect(570, 340, 180, 120),
+BUTTON_COLLISIONS = {'play': pygame.Rect(570, 340, 180, 120),
                      'instructions': pygame.Rect(430, 470, 400, 120)}
 
 ##Flag that defines the emotion of each castaway
@@ -256,7 +254,6 @@ def update_screens(screens):
             MAIN_SCREEN.blit(GAME_SCREENS['lost'], (0, 0))
         case 4:
             MAIN_SCREEN.blit(GAME_SCREENS['won'], (0, 0))
-    MAIN_SCREEN.blit(GAME_SCREENS['close'], (0, 0))
     pygame.display.flip()
 
 ##Check how each screen reacts to clicks
@@ -277,33 +274,21 @@ def click_screens(screens, click_pos):
         ##Losing or winning screens
         case _:
             screens.setup()
-    ##Update the screen
     update_screens(screens)
 
 ##Create the object that stores the current screen
 screens = Screens()
-
-##Set the initial state of the screen
 update_screens(screens)
 
-##Loop condition
-running = True
-
 ##Main loop
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        ##Check for click
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                click_pos = pygame.mouse.get_pos()
-                ##End game if clicked on close button
-                if BUTTON_COLLISIONS['close'].collidepoint(click_pos):
-                    running = False
-                else:
+async def main():
+    while True:
+        for event in pygame.event.get():
+            ##Check for click
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click_pos = pygame.mouse.get_pos()
                     click_screens(screens, click_pos)
+        await asyncio.sleep(0)
 
-##Exit game
-pygame.quit()
-sys.exit()
+asyncio.run(main())
