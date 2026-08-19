@@ -214,26 +214,27 @@ def check_collision(sprite, spr_pos, click_pos):
     return spr_rect.collidepoint(click_pos)
 
 def click_sprites(game, click_pos):
+    if not all(game.raft):
+        ##React for the castaways' sprites
+        for j in reversed(range(2)):
+            for k in range(3):
+                castaway = game.islands[game.side][j][k]
+                if not castaway:
+                    continue
+                castaway_index = (game.side, j, k)
+                sprite = HUMAN_SPRITES[(game.side, castaway, 0)]
+                spr_pos = CASTAWAY_POS[castaway_index]
+                if check_collision(sprite, spr_pos, click_pos):
+                    return game.embark(castaway_index, game.raft.index(0))
+    ##React for passengers' sprites
     for passenger_index in range(2):
         passenger = game.raft[passenger_index]
-        if passenger:
-            ##React for passengers' sprites
-            sprite = HUMAN_SPRITES[(game.side, passenger, 0)]
-            spr_pos = PASSENGER_POS[(game.side, passenger_index)]
-            if check_collision(sprite, spr_pos, click_pos):
-                return game.disembark(passenger_index)
-        else:
-            ##React for the castaways' sprites
-            for j in reversed(range(2)):
-                for k in range(3):
-                    castaway = game.islands[game.side][j][k]
-                    if not castaway:
-                        continue
-                    castaway_index = (game.side, j, k)
-                    sprite = HUMAN_SPRITES[(game.side, castaway, 0)]
-                    spr_pos = CASTAWAY_POS[castaway_index]
-                    if check_collision(sprite, spr_pos, click_pos):
-                        return game.embark(castaway_index, passenger_index)
+        if not passenger:
+            continue
+        sprite = HUMAN_SPRITES[(game.side, passenger, 0)]
+        spr_pos = PASSENGER_POS[(game.side, passenger_index)]
+        if check_collision(sprite, spr_pos, click_pos):
+            return game.disembark(passenger_index)
     ##React for raft's sprite
     if any(game.raft):
         sprite = RAFT_SPRITES[game.side]
