@@ -285,11 +285,20 @@ update_screens(screens)
 async def main():
     while True:
         for event in pygame.event.get():
-            ##Check for click
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click_pos = pygame.mouse.get_pos()
-                    click_screens(screens, click_pos)
+            match event.type:
+                case pygame.QUIT:
+                    return
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
+                case pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        click_pos = pygame.mouse.get_pos()
+                        click_screens(screens, click_pos)
         await asyncio.sleep(0)
 
 asyncio.run(main())
+
+##Exiting and closing game
+pygame.quit()
+sys.exit()
